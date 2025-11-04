@@ -1,0 +1,558 @@
+{
+  "info": {
+    "name": "Historia Enhanced API Collection",
+    "description": "Complete API collection for Historia Enhanced educational platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@historia.com\",\n  \"password\": \"password123\",\n  \"targetExam\": \"UPSC\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"priya@historia.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "if (pm.response.code === 200) {",
+                    "    const response = pm.response.json();",
+                    "    pm.collectionVariables.set('authToken', response.token);",
+                    "}"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Flashcards (SRS)",
+      "item": [
+        {
+          "name": "Get All Flashcards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flashcards?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["flashcards"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Due Flashcards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/review/due",
+              "host": ["{{baseUrl}}"],
+              "path": ["flashcards", "review", "due"]
+            }
+          }
+        },
+        {
+          "name": "Submit Flashcard Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quality\": 2,\n  \"timeSpent\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/1/review",
+              "host": ["{{baseUrl}}"],
+              "path": ["flashcards", "1", "review"]
+            }
+          }
+        },
+        {
+          "name": "Get User Flashcard Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/stats/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["flashcards", "stats", "user"]
+            }
+          }
+        },
+        {
+          "name": "Add Flashcard to Deck",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/flashcards/1/add",
+              "host": ["{{baseUrl}}"],
+              "path": ["flashcards", "1", "add"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Community",
+      "item": [
+        {
+          "name": "Get Community Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/community/posts?page=1&limit=10&category=all&sort=recent",
+              "host": ["{{baseUrl}}"],
+              "path": ["community", "posts"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "category",
+                  "value": "all"
+                },
+                {
+                  "key": "sort",
+                  "value": "recent"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Community Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"What was the significance of the Gupta period?\",\n  \"content\": \"I'm studying about the Gupta Empire and want to understand why it's called the Golden Age of India. Can someone explain the key achievements and contributions?\",\n  \"category\": \"Ancient India\",\n  \"tags\": [\"Gupta Empire\", \"Golden Age\", \"Ancient India\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/community/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["community", "posts"]
+            }
+          }
+        },
+        {
+          "name": "Get Single Post with Answers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/community/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["community", "posts", "1"]
+            }
+          }
+        },
+        {
+          "name": "Add Answer to Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"The Gupta period (320-550 CE) is called the Golden Age because of remarkable achievements in arts, science, literature, and mathematics. Key contributions include: Aryabhata's astronomical discoveries, Kalidasa's literary works, the concept of zero, and beautiful cave paintings at Ajanta.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/community/posts/1/answers",
+              "host": ["{{baseUrl}}"],
+              "path": ["community", "posts", "1", "answers"]
+            }
+          }
+        },
+        {
+          "name": "Vote on Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"up\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/community/posts/1/vote",
+              "host": ["{{baseUrl}}"],
+              "path": ["community", "posts", "1", "vote"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progress Analytics",
+      "item": [
+        {
+          "name": "Get User Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/progress/analytics?days=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "analytics"],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record Activity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activityType\": \"lesson\",\n  \"value\": 1,\n  \"timeSpent\": 15,\n  \"xpEarned\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/activity",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "activity"]
+            }
+          }
+        },
+        {
+          "name": "Get Streak Information",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/progress/streak",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "streak"]
+            }
+          }
+        },
+        {
+          "name": "Get Leaderboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/progress/leaderboard?type=xp&period=month",
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "leaderboard"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "xp"
+                },
+                {
+                  "key": "period",
+                  "value": "month"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stories",
+      "item": [
+        {
+          "name": "Get All Stories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stories?page=1&limit=12&era=all",
+              "host": ["{{baseUrl}}"],
+              "path": ["stories"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "12"
+                },
+                {
+                  "key": "era",
+                  "value": "all"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Story by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stories/ashoka-transformation",
+              "host": ["{{baseUrl}}"],
+              "path": ["stories", "ashoka-transformation"]
+            }
+          }
+        },
+        {
+          "name": "Like Story",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stories/1/like",
+              "host": ["{{baseUrl}}"],
+              "path": ["stories", "1", "like"]
+            }
+          }
+        },
+        {
+          "name": "Get Featured Stories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stories/featured/list",
+              "host": ["{{baseUrl}}"],
+              "path": ["stories", "featured", "list"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lessons",
+      "item": [
+        {
+          "name": "Get All Lessons",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lessons?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["lessons"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Lesson by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lessons/indus-valley-civilization",
+              "host": ["{{baseUrl}}"],
+              "path": ["lessons", "indus-valley-civilization"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quizzes",
+      "item": [
+        {
+          "name": "Get All Quizzes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/quizzes?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["quizzes"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Quiz by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/quizzes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["quizzes", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"targetExam\": \"SSC\",\n  \"preferences\": {\n    \"darkMode\": true,\n    \"notifications\": false\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "profile"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "project-historia",
+  "version": "1.0.0",
+  "description": "A gamified history learning platform for UPSC aspirants",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cross-env PORT=3001 npm start --prefix client",
+    "build": "cd client && npm run build",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": [
+    "history",
+    "education",
+    "upsc",
+    "gamification",
+    "learning"
+  ],
+  "author": "Project Historia Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^10.1.0"
+  },
+  "dependencies": {
+    "axios": "^1.13.1",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
